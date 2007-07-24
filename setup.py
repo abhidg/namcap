@@ -4,7 +4,7 @@ from distutils.core import setup
 DATAFILES = [('/usr/man/man1', ['namcap.1'])]
 
 setup(name="namcap",
-	version="1.5.2",
+	version="2.0",
 	description="Pacman package analyzer",
 	author="Jason Chu",
 	author_email="jason@archlinux.org",
