@@ -31,10 +31,11 @@ class package:
 		if hasattr(pkginfo, 'source'):
 			if not hasattr(pkginfo, 'md5sums'):
 				ret[0].append('Missing md5sums')
-			if len(pkginfo.source) > len(pkginfo.md5sums):
-				ret[0].append('Not enough md5sums: %i needed' % len(pkginfo.source))
-			elif len(pkginfo.source) < len(pkginfo.md5sums):
-				ret[0].append('Too Many md5sums: %i needed' % len(pkginfo.source))
+			else:
+				if len(pkginfo.source) > len(pkginfo.md5sums):
+					ret[0].append('Not enough md5sums: %i needed' % len(pkginfo.source))
+				elif len(pkginfo.source) < len(pkginfo.md5sums):
+					ret[0].append('Too Many md5sums: %i needed' % len(pkginfo.source))
 		if hasattr(pkginfo, 'md5sums'):
 			for sum in pkginfo.md5sums:
 				if len(sum) != 32:
