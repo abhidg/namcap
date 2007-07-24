@@ -1,5 +1,5 @@
 # 
-# namcap rules - __init__
+# namcap rules - licensepkg
 # Copyright (C) 2003-2007 Jason Chu <jason@archlinux.org>
 # 
 #   This program is free software; you can redistribute it and/or modify
@@ -17,8 +17,19 @@
 #   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 # 
 
-__tarball__ = ['depends', 'directoryname', 'fileownership', 'gnomemenu', 'perllocal', 'permissions', 'symlink', 'urlpkg', 'capsnamespkg', 'emptydir', 'scrollkeeper', 'libtool', 'gnomemime', 'licensepkg']
+import pacman
 
-__pkgbuild__ = ['md5sums', 'tags', 'url', 'invalidstartdir', 'capsnames', 'carch', 'sfurl', 'badbackups', 'license']
-
-__all__ = __tarball__ + __pkgbuild__
+class package:
+	def short_name(self):
+		return "licensepkg"
+	def long_name(self):
+		return "Verifies license is included in a package file"
+	def prereq(self):
+		return "pkg"
+	def analyze(self, pkginfo, tar):
+		ret = [[],[],[]]
+		if not hasattr(pkginfo, 'license') or len(pkginfo.license) == 0:
+			ret[0].append('Missing license')
+		return ret
+	def type(self):
+		return "tarball"
