@@ -8,6 +8,6 @@ setup(name="namcap",
 	description="Pacman package analyzer",
 	author="Jason Chu",
 	author_email="jason@archlinux.org",
-	py_modules=["pacman"], packages=["Namcap"], scripts=["namcap.py"],data_files =DATAFILES)
+	py_modules=["pacman"], packages=["Namcap"], scripts=["namcap.py", 'parsepkgbuild'],data_files =DATAFILES)
 
 
