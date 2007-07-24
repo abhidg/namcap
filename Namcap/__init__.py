@@ -19,6 +19,6 @@
 
 __tarball__ = ['depends', 'directoryname', 'fileownership', 'gnomemenu', 'perllocal', 'permissions', 'symlink', 'urlpkg', 'capsnamespkg', 'emptydir', 'scrollkeeper', 'libtool', 'gnomemime', 'licensepkg']
 
-__pkgbuild__ = ['md5sums', 'tags', 'url', 'invalidstartdir', 'capsnames', 'carch', 'sfurl', 'badbackups', 'license']
+__pkgbuild__ = ['md5sums', 'tags', 'url', 'invalidstartdir', 'capsnames', 'carch', 'sfurl', 'badbackups', 'license', 'arrays']
 
 __all__ = __tarball__ + __pkgbuild__

@@ -19,6 +19,9 @@ only apply RULELIST rules to the package
 RULELIST is a comma-seperated list of rule names; if RULELIST=list then namcap returns a list of valid rules and their descriptions
 .SH RULES
 .TP
+.B arrays
+arrays verifies that array variables are actually arrays and not strings
+.TP
 .B badbackups
 badbackups verifies that backup entries don't have a / at the beginning of them
 .TP
