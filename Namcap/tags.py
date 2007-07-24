@@ -28,18 +28,29 @@ class package:
 		return ""
 	def analyze(self, pkginfo, tar):
 		ret = [[],[],[]]
+		contributortag = 0
 		maintainertag = 0
 		idtag = 0
 		for i in pkginfo.pkgbuild:
+			if re.match("#\s*Contributor\s*:",i) != None:
+				contributortag = 1
 			if re.match("#\s*Maintainer\s*:",i) != None:
 				maintainertag = 1
 			if re.match("#\s*\$Id.*\$",i) != None:
 				idtag = 1
 
+		if contributortag != 1:
+			ret[1].append('Missing Contributor tag')
+
 		if maintainertag != 1:
 			ret[1].append('Missing Maintainer tag')
+		else:
+			ret[2].append('Maintainer tags for TUs and devs only')
+
 		if idtag != 1:
 			ret[1].append('Missing CVS Id tag')
+		else:
+			ret[2].append('CVS Id tags for TUs and devs only')
 		return ret
 	def type(self):
 		return "pkgbuild"
