@@ -28,7 +28,7 @@ class package:
 		return ""
 	def analyze(self, pkginfo, tar):
 		ret = [[],[],[]]
-                if pkginfo.url != None and pkginfo.source != None:
+                if hasattr(pkginfo, 'url') and hasattr(pkginfo, 'source'):
                     for source in pkginfo.source:
                         if re.match('(http://|ftp://)\w+.dl.sourceforge.net',source) != None:
                             ret[1].append('Attempting to use specific sf.net mirror, use dl.sourceforge.net instead')

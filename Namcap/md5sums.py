@@ -28,14 +28,14 @@ class package:
 		return ""
 	def analyze(self, pkginfo, tar):
 		ret = [[],[],[]]
-		if pkginfo.source != None:
-			if pkginfo.md5sums == None:
+		if hasattr(pkginfo, 'source'):
+			if not hasattr(pkginfo, 'md5sums'):
 				ret[0].append('Missing md5sums')
 			if len(pkginfo.source) > len(pkginfo.md5sums):
 				ret[0].append('Not enough md5sums: %i needed' % len(pkginfo.source))
 			elif len(pkginfo.source) < len(pkginfo.md5sums):
 				ret[0].append('Too Many md5sums: %i needed' % len(pkginfo.source))
-		if pkginfo.md5sums != None:
+		if hasattr(pkginfo, 'md5sums'):
 			for sum in pkginfo.md5sums:
 				if len(sum) != 32:
 					ret[0].append("Improper md5sum: '%s'" % sum) 

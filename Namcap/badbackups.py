@@ -28,7 +28,7 @@ class package:
 		return ""
 	def analyze(self, pkginfo, tar):
 		ret = [[],[],[]]
-		if pkginfo.backup != None:
+		if hasattr(pkginfo, 'backup'):
 			for item in pkginfo.backup:
 				if re.match('^/',item) != None:
 					ret[0].append("Backup entries should not have preceeding slashes")

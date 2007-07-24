@@ -32,14 +32,14 @@ def getcovered(current, dependlist, covereddepend):
 	if current == None:
 		for i in dependlist:
 			pac = load(i)
-			if pac != None and pac.depends != None:
+			if pac != None and hasattr(pac, 'depends'):
 				for j in pac.depends:
 					if j != None and not j in covereddepend.keys():
 						covereddepend[j] = 1
 						getcovered(j, dependlist, covereddepend)
 	else:
 		pac = load(current)
-		if pac != None and pac.depends != None:
+		if pac != None and hasattr(pac, 'depends'):
 			for i in pac.depends:
 				if i != None and not i in covereddepend.keys():
 					covereddepend[i] = 1
@@ -141,7 +141,7 @@ def getprovides(depends, provides):
 	for i in depends.keys():
 		pac = load(i)
 
-		if pac != None and pac.provides != None:
+		if pac != None and hasattr(pac, 'provides'):
 			provides[i] = pac.provides
 
 def filllibcache():
@@ -202,12 +202,12 @@ class package:
 			for i in dependlist.keys():
 				p = pacman.load(i, '/var/lib/pacman/testing/')
 				q = load(i)
-				if p != None and q != None and p.release == q.release and p.version == q.version:
+				if p != None and q != None and p.version == q.version:
 					ret[1].append('Dependency ' + i + ' on your system is a testing release')
 
 		# Find all the covered dependencies from the PKGBUILD
 		pkgdepend = {}
-		if pkginfo.depends != None:
+		if hasattr(pkginfo, 'depends'):
 			for i in pkginfo.depends:
 				pkgdepend[i] = 1
 		getcovered(None, pkgdepend, pkgcovered)
@@ -233,12 +233,12 @@ class package:
 			# and those provides aren't included in the package's dependencies)
 			# or there are no provides for i))
 			# or the PKGBUILD has no dependencies
-			if (pkginfo.depends != None and i not in pkginfo.depends and i != pkginfo.name and ((smartprovides.has_key(i) and len([c for c in smartprovides[i] if c in pkgcovered.keys()]) == 0) or not smartprovides.has_key(i))) or pkginfo.depends == None:
+			if (hasattr(pkginfo, 'depends') and i not in pkginfo.depends and i != pkginfo.name and ((smartprovides.has_key(i) and len([c for c in smartprovides[i] if c in pkgcovered.keys()]) == 0) or not smartprovides.has_key(i))) or not hasattr(pkginfo, 'depends'):
 					if type(dependlist[i]) == dict:
 						ret[0].append('Dependency detected and not included ('+i+') from files '+str([x[len(data)+1:] for x in dependlist[i].keys()]))
 					else:
 						ret[0].append('Dependency detected and not included ('+i+')')
-		if pkginfo.depends != None:
+		if hasattr(pkginfo, 'depends'):
 			for i in pkginfo.depends:
 				if covereddepend.has_key(i) and dependlist.has_key(i):
 					ret[1].append('Dependency included but already satisfied ('+i+')')

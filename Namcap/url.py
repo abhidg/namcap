@@ -28,7 +28,7 @@ class package:
 		return ""
 	def analyze(self, pkginfo, tar):
 		ret = [[],[],[]]
-		if pkginfo.url == None:
+		if not hasattr(pkginfo, 'url'):
 			ret[0].append('Missing url')
 		return ret
 	def type(self):
