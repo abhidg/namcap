@@ -79,7 +79,8 @@ def load(package, root=None):
 			if m != None:
 				lhs = m.group(1)
 				rhs = m.group(2)
-				ret.__dict__.setdefault(lhs, []).append(rhs)
+				if rhs != '':
+					ret.__dict__.setdefault(lhs, []).append(rhs)
 
 		filelist = pkgtar.extractfile('.FILELIST')
 		for i in filelist.readlines():
