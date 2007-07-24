@@ -33,6 +33,8 @@ class package:
 				ret[1].append("File (" + i.name + ") does not have the world readable bit set.")
 			if i.mode & 2 and not (i.issym() or i.islnk()):
 				ret[1].append("File (" + i.name + ") has the world writable bit set.")
+			if not i.mode & 1 and i.isdir():
+				ret[1].append("Directory (" + i.name + ") does not has the world executable bit set.")
 		return ret
 	def type(self):
 		return "tarball"
