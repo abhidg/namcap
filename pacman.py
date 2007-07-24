@@ -22,30 +22,42 @@ pacmandb = '/var/lib/pacman/local/'
 
 class PacmanPackage(object):
 	strings = ['name', 'version', 'desc', 'url', 'builddate', 'packager', 'install', 'filename', 'csize', 'isize', ]
-	equiv_vars = [('md5sums', 'md5sum'), ('sha1sums', 'sha1sum'), ('depends', 'depend'), ('desc', 'pkgdesc'), ('isize', 'size'), ]
+	equiv_vars = [('name', 'pkgname'), ('md5sums', 'md5sum'), ('sha1sums', 'sha1sum'), ('depends', 'depend'), ('desc', 'pkgdesc'), ('isize', 'size'), ]
 
 	def __init__(self, **data):
 		self.__dict__.update(data)
 
 	def process_strings(self):
+		"""
+		Turn all the instance properties listed in self.strings into strings instead of lists
+		"""
 		for i in self.strings:
 			value = getattr(self, i, None)
 			if type(value) == list:
 				setattr(self, i, value[0])
 
 	def fix_equiv(self):
+		"""
+		Go through self.equiv_vars ( (new, old) ) and set all the old vars to new vars
+		"""
 		for new, old in self.equiv_vars:
 			if hasattr(self, old):
 				setattr(self, new, getattr(self, old))
 				del self.__dict__[old]
 
 	def clean_depends(self):
+		"""
+		Go through the special depends instance property, copy it to self.orig_depends and strip all the depend version info off ('neon>=0.25.5-4' => 'neon')
+		"""
 		if hasattr(self, 'depends'):
 			self.orig_depends = self.depends[:]
 			for item, value in enumerate(self.depends):
 				self.depends[item] = value.split('>')[0].split('<')[0].split('=')[0]
 
 	def process(self):
+		"""
+		After all the text processing happens, call this to sanitize the PacmanPackage object a bit
+		"""
 		self.fix_equiv()
 		self.process_strings()
 		self.clean_depends()
@@ -63,15 +75,15 @@ def load(package, root=None):
 		pkginfo = pkgtar.extractfile('.PKGINFO')
 		ret = PacmanPackage()
 		for i in pkginfo.readlines():
-			re.match('(.*) = (.*)', i)
+			m = re.match('(.*) = (.*)', i)
 			if m != None:
 				lhs = m.group(1)
-				rhs = m.group(1)
+				rhs = m.group(2)
 				ret.__dict__.setdefault(lhs, []).append(rhs)
 
 		filelist = pkgtar.extractfile('.FILELIST')
 		for i in filelist.readlines():
-			if ret.files == None:
+			if not hasattr(ret, 'files'):
 				ret.files = []
 			ret.files.append(i[:-1])
 		pkgtar.close()
@@ -80,11 +92,20 @@ def load(package, root=None):
 
 	# Ooooo, it's a PKGBUILD
 	elif package.endswith('PKGBUILD'):
+		# Load all the data like we normally would
 		workingdir = os.path.dirname(package)
+		if workingdir == '':
+			workingdir = None
 		filename = os.path.basename(package)
-		process = subprocess.Popen(['parsepkgbuild',filename], stdout=subprocess.PIPE, cwd=workingdir)
+		process = subprocess.Popen(['/usr/bin/parsepkgbuild',filename], stdout=subprocess.PIPE, cwd=workingdir)
 		data = process.stdout.read()
 		ret = loaddb(None, data)
+
+		# Add a nice little .pkgbuild surprise
+		pkgbuild = open(package)
+		ret.pkgbuild = pkgbuild.readlines()
+		pkgbuild.close()
+
 		ret.process()
 
 		return ret
