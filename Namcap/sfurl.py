@@ -28,10 +28,12 @@ class package:
 		return ""
 	def analyze(self, pkginfo, tar):
 		ret = [[],[],[]]
-                if hasattr(pkginfo, 'url') and hasattr(pkginfo, 'source'):
-                    for source in pkginfo.source:
-                        if re.match('(http://|ftp://)\w+.dl.sourceforge.net',source) != None:
-                            ret[1].append('Attempting to use specific sf.net mirror, use dl.sourceforge.net or downloads.sourceforge.net instead')
+		if hasattr(pkginfo, 'source'):
+			for source in pkginfo.source:
+				if re.match('(http://|ftp://)\w+.dl.sourceforge.net',source) != None:
+					ret[1].append('Attempting to use specific sf.net mirror, use downloads.sourceforge.net instead')
+				if re.match('(http://|ftp://)dl.sourceforge.net',source) != None:
+					ret[1].append('Attempting to use dl.sourceforge.net, use downloads.sourceforge.net instead')
 		return ret
 	def type(self):
 		return "pkgbuild"
