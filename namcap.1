@@ -1,4 +1,4 @@
-.TH namcap 1 "May 03, 2004" "namcap 1.5.2" "User Commands"
+.TH namcap 1 "July 24, 2007" "namcap 2.0" "User Commands"
 .SH NAME
 namcap \- package analysis utility
 .SH SYNOPSIS
@@ -51,6 +51,12 @@ gnomemenu looks for file to be stored in /usr/share/gnome/apps
 .B invalidstartdir
 Any PKGBUILDs that refer to files not stored in $startdir/pkg or $startdir/src are incorrect
 .TP
+.B license
+license verifies that the licenses variable has been filled in in a PKGBUILD
+.TP
+.B licensepkg
+licensepkg verifies that the licenses variable has been filled in in a package
+.TP
 .B md5sums
 md5sums makes sure that a PKGBUILD includes the md5sums
 .TP
@@ -58,7 +64,7 @@ md5sums makes sure that a PKGBUILD includes the md5sums
 perllocal searches for perllocal.pod.  perllocal.pod is a nasty file that's included during most perl module installations
 .TP
 .B permissions
-permissions checks basic file and and directory permissions.  It returns warnings about world readable bits not being set and work writable bits being set
+permissions checks basic file and and directory permissions.  It returns warnings about world readable bits not being set, world writable bits being set, and world executable bit not being set for directories
 .TP
 .B sfurl
 sfurl verifies that a PKGBUILD is downloading from a specific sourceforge mirror
