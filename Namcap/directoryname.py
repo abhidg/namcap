@@ -27,7 +27,7 @@ class package:
 	def prereq(self):
 		return "tar"
 	def analyze(self, pkginfo, tar):
-		valid_paths = ['etc/', 'usr/bin/', 'usr/sbin/', 'usr/lib', 'usr/include/', 'usr/man/', 'usr/share/', 'opt/', '.PKGINFO', '.INSTALL', '.FILELIST', '._install', 'usr/X11R6/bin/', 'usr/X11R6/include/', 'usr/X11R6/lib/', 'usr/X11R6/man/', 'usr/X11R6/share/', 'lib', 'sbin/']
+		valid_paths = ['etc/', 'usr/bin/', 'usr/sbin/', 'usr/lib', 'usr/include/', 'usr/man/', 'usr/share/', 'opt/', '.PKGINFO', '.INSTALL', '.FILELIST', '._install', 'lib/', 'sbin/', 'srv/', 'var/lib/', 'var/opt/', 'var/spool/', 'var/lock/', 'var/state/', 'var/run/', 'var/log/', '.CHANGELOG']
 		ret = [[],[],[]]
 		for i in tar.getnames():
 			# Replace multiple /'s at the end of a string with a single /
