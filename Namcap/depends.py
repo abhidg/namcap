@@ -26,7 +26,7 @@ def load(name, path=None):
 		pkgcache[name] = pacman.load(name)
 	return pkgcache[name]
 
-libcache = {}
+libcache = {'i686': {}, 'x86-64': {}}
 
 def getcovered(current, dependlist, covereddepend):
 	if current == None:
@@ -45,50 +45,55 @@ def getcovered(current, dependlist, covereddepend):
 					covereddepend[i] = 1
 					getcovered(i, dependlist, covereddepend)
 
-def walkfunc(arg, dirname, names):
+def figurebitsize(line):
+	"""
+	Given a line of output from readelf (usually Shared library:) return 'i686' or 'x86-64' if the binary is a 32bit or 64bit binary
+	"""
+
+	address = line.split()[0]
+	if len(address) == 18: # + '0x' + 16 digits
+		return 'x86-64'
+	else:
+		return 'i686'
+
+def scanlibs(data, dirname, names):
+	"""
+	Walk over all the files in the package and run "readelf -d" on them.
+	If they depend on a library, store that library's path in sharedlibs
+	"""
+	sharedlibs, scripts = data
 	for i in names:
 		if os.path.isfile(dirname+'/'+i):
 			var = os.popen3('readelf -d ' + dirname+'/'+i)
 			for j in var[1].readlines():
-				if re.search('Shared library',j) != None:
-					n = re.search('Shared library: \[(.*)\]', j)
-					if n != None:
-						try:
-							if not arg[0].has_key(os.path.abspath(libcache[n.group(1)])[1:]):
-								arg[0][os.path.abspath(libcache[n.group(1)])[1:]] = {}
-							arg[0][os.path.abspath(libcache[n.group(1)])[1:]][dirname+'/'+i] = 1
-						except KeyError:
-							# Ignore that library if we can't find it
-							# TODO: review it
-							pass
+				n = re.search('Shared library: \[(.*)\]', j)
+				# Is this a Shared library: line?
+				if n != None:
+					# Find out its architecture
+					architecture = figurebitsize(j)
+					try:
+						libpath = os.path.abspath(libcache[architecture][n.group(1)])[1:]
+						sharedlibs.setdefault(libpath, {})[dirname+'/'+i] = 1
+					except KeyError:
+						# Ignore that library if we can't find it
+						# TODO: review it
+						pass
 				# But we can check to see if it's a script we know about
 				else:
 					fd = open(dirname+'/'+i)
 					firstline = fd.readline()
 					if re.match('#!.*python',firstline) != None:
-						if not arg[1].has_key('python'):
-							arg[1]['python'] = {}
-						arg[1]['python'][dirname+'/'+i] = 1
+						scripts.setdefault('python', {})[dirname+'/'+i] = 1
 					elif re.match('#!.*perl',firstline) != None:
-						if not arg[1].has_key('perl'):
-							arg[1]['perl'] = {}
-						arg[1]['perl'][dirname+'/'+i] = 1
+						scripts.setdefault('perl', {})[dirname+'/'+i] = 1
 					elif re.match('#!.*ruby',firstline) != None:
-						if not arg[1].has_key('ruby'):
-							arg[1]['ruby'] = {}
-						arg[1]['ruby'][dirname+'/'+i] = 1
+						scripts.setdefault('ruby', {})[dirname+'/'+i] = 1
 					elif re.match('#!.*bash',firstline) != None or re.match('#!.*sh',firstline) != None:
-						if not arg[1].has_key('bash'):
-							arg[1]['bash'] = {}
-						arg[1]['bash'][dirname+'/'+i] = 1
+						scripts.setdefault('bash', {})[dirname+'/'+i] = 1
 					elif re.match('#!.*wish',firstline) != None:
-						if not arg[1].has_key('tk'):
-							arg[1]['tk'] = {}
-						arg[1]['tk'][dirname+'/'+i] = 1
+						scripts.setdefault('tk', {})[dirname+'/'+i] = 1
 					elif re.match('#!.*expect',firstline) != None:
-						if not arg[1].has_key('expect'):
-							arg[1]['expect'] = {}
-						arg[1]['expect'][dirname+'/'+i] = 1
+						scripts.setdefault('expect', {})[dirname+'/'+i] = 1
 					fd.close()
 			var[0].close()
 			var[1].close()
@@ -141,15 +146,18 @@ def getprovides(depends, provides):
 	for i in depends.keys():
 		pac = load(i)
 
-		if pac != None and hasattr(pac, 'provides'):
+		if pac != None and hasattr(pac, 'provides') and pac.provides != None:
 			provides[i] = pac.provides
 
 def filllibcache():
 	var = os.popen3('ldconfig -p')
 	for j in var[1].readlines():
-		g = re.match('\s*(.*) \(.*\) => (.*)',j)
+		g = re.match('\s*(.*) \((.*)\) => (.*)',j)
 		if g != None:
-			libcache[g.group(1)] = g.group(2)
+			if g.group(2).startswith('libc6,x86-64'):
+				libcache['x86-64'][g.group(1)] = g.group(3)
+			else:
+				libcache['i686'][g.group(1)] = g.group(3)
 
 
 class package:
@@ -169,7 +177,7 @@ class package:
 		ret = [[],[],[]]
 		filllibcache()
 		os.environ['LC_ALL'] = 'C'
-		os.path.walk(data, walkfunc, liblist)
+		os.path.walk(data, scanlibs, liblist)
 
 		# Ldd all the files and find all the link and script dependencies
 		dependlist, tmpret = finddepends(liblist[0])
