@@ -105,7 +105,8 @@ for package in packages:
 
 		if not pkgtar:
 			print "Error: " + package + " is not a package"
-			usage()
+			if len(packages) > 1:
+				continue
 
 		pkginfo = pacman.load(package)
 
@@ -154,6 +155,7 @@ for package in packages:
 
 		if pkginfo == None:
 			print "Error: " + package + " is not a valid PKGBUILD"
+			continue
 
 		if active_modules == []:
 			active_modules = modules
