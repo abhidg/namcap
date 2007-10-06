@@ -49,6 +49,9 @@ def verify_package(filename):
 	if not '.PKGINFO' in tar.getnames():
 		tar.close()
 		return 0
+	if not '.FILELIST' in tar.getnames():
+		tar.close()
+		return 0
 	return tar
 
 # Main
