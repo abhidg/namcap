@@ -18,6 +18,7 @@
 # 
 
 import pacman
+import os.path
 
 class package:
 	def short_name(self):
@@ -25,11 +26,26 @@ class package:
 	def long_name(self):
 		return "Verifies license is included in a package file"
 	def prereq(self):
-		return "pkg"
+		return "tar"
 	def analyze(self, pkginfo, tar):
 		ret = [[],[],[]]
 		if not hasattr(pkginfo, 'license') or len(pkginfo.license) == 0:
 			ret[0].append('Missing license')
+		else:
+			licensepaths = [x for x in tar.getnames() if x.startswith('usr/share/licenses') and not x.endswith('/')]
+			licensedirs = [os.path.split(os.path.split(x)[0])[1] for x in licensepaths]
+			licensefiles = [os.path.split(x)[1] for x in licensepaths]
+			# Check all licenses for validity
+			for license in pkginfo.license:
+				if license.startswith('custom') or license == "BSD" or license == "MIT":
+					if pkginfo.name not in licensedirs:
+						ret[0].append('Missing custom license directory (usr/share/licenses/%s)' % pkginfo.name)
+					elif len(licensefiles) == 0:
+						ret[0].append('Missing custom license file in package (usr/share/licenses/%s/*)' % pkginfo.name)
+				# A common license
+				else:
+					if not os.path.isdir('/usr/share/licenses/common/%s' % license):
+						ret[0].append("%s is not a common license (/usr/share/licenses/common/%s does not exist)" % (license, license))
 		return ret
 	def type(self):
 		return "tarball"
