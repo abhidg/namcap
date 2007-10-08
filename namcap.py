@@ -43,14 +43,19 @@ def verify_package(filename):
 		return 0
 	if not tarfile.is_tarfile(filename):
 		return 0
-	tar = tarfile.open(package, "r")
-	if not tar:
-		return 0
-	if not '.PKGINFO' in tar.getnames():
-		tar.close()
-		return 0
-	if not '.FILELIST' in tar.getnames():
-		tar.close()
+	try:
+		tar = tarfile.open(package, "r")
+		if not tar:
+			return 0
+		if not '.PKGINFO' in tar.getnames():
+			tar.close()
+			return 0
+		if not '.FILELIST' in tar.getnames():
+			tar.close()
+			return 0
+	except IOError:
+		if tar:
+			tar.close()
 		return 0
 	return tar
 
