@@ -37,14 +37,16 @@ class package:
 			licensefiles = [os.path.split(x)[1] for x in licensepaths]
 			# Check all licenses for validity
 			for license in pkginfo.license:
-				if license.startswith('custom') or license == "BSD" or license == "MIT":
+				lowerlicense = license.lower()
+				if lowerlicense.startswith('custom') or lowerlicense in ("bsd", "mit"):
 					if pkginfo.name not in licensedirs:
 						ret[0].append('Missing custom license directory (usr/share/licenses/%s)' % pkginfo.name)
 					elif len(licensefiles) == 0:
 						ret[0].append('Missing custom license file in package (usr/share/licenses/%s/*)' % pkginfo.name)
 				# A common license
 				else:
-					if not os.path.isdir('/usr/share/licenses/common/%s' % license):
+					commonlicenses = [x.lower() for x in os.listdir('/usr/share/licenses/common')]
+					if lowerlicense not in commonlicenses:
 						ret[0].append("%s is not a common license (/usr/share/licenses/common/%s does not exist)" % (license, license))
 		return ret
 	def type(self):
