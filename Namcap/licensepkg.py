@@ -38,7 +38,7 @@ class package:
 			# Check all licenses for validity
 			for license in pkginfo.license:
 				lowerlicense = license.lower()
-				if lowerlicense.startswith('custom') or lowerlicense in ("bsd", "mit"):
+				if lowerlicense.startswith('custom') or lowerlicense in ("bsd", "mit", "isc", "python", "zlib", "libpng"):
 					if pkginfo.name not in licensedirs:
 						ret[0].append('Missing custom license directory (usr/share/licenses/%s)' % pkginfo.name)
 					elif len(licensefiles) == 0:
