@@ -82,13 +82,6 @@ def load(package, root=None):
 				if rhs != '':
 					ret.__dict__.setdefault(lhs, []).append(rhs)
 
-		if not '.FILELIST' in pkgtar.getnames():
-			return None
-		filelist = pkgtar.extractfile('.FILELIST')
-		for i in filelist.readlines():
-			if not hasattr(ret, 'files'):
-				ret.files = []
-			ret.files.append(i[:-1])
 		pkgtar.close()
 		ret.process()
 		return ret
