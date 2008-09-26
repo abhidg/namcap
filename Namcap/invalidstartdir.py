@@ -32,7 +32,11 @@ class package:
 			startdirs = re.split('\$startdir',i)
 			for j in startdirs[1:]:
 				if j[:4] != '/pkg' and j[:4] != '/src':
-					ret[1].append('file referenced in $startdir outside of $startdir/src or $startdir/pkg')
+					ret[0].append('File referenced in $startdir outside of $startdir/src or $startdir/pkg')
+				elif j[:4] == '/pkg':
+					ret[2].append('Recommend use of $pkgdir instead of $startdir/pkg')
+				elif j[:4] == '/src':
+					ret[2].append('Recommend use of $srcdir instead of $startdir/src')
 		return ret
 	def type(self):
 		return "pkgbuild"
