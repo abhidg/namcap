@@ -218,6 +218,12 @@ class package:
 		if hasattr(pkginfo, 'depends'):
 			for i in pkginfo.depends:
 				pkgdepend[i] = 1
+
+		# Include the optdepends from the PKGBUILD
+		if hasattr(pkginfo, 'optdepends'):
+			for i in pkginfo.optdepends:
+				pkgdepend[i] = 1
+
 		getcovered(None, pkgdepend, pkgcovered)
 
 		# Do tree walking to find all the non-leaves (branches?)
@@ -234,14 +240,13 @@ class package:
 
 		# Do the actual message outputting stuff
 		for i in smartdepend.keys():
-			# If (the PKGBUILD has dependencies 
-			# and i isn't in them
+			# If (i is not in the PKGBUILD's dependencies
 			# and i isn't the package name
 			# and ((there are provides for i
 			# and those provides aren't included in the package's dependencies)
 			# or there are no provides for i))
-			# or the PKGBUILD has no dependencies
-			if (hasattr(pkginfo, 'depends') and i not in pkginfo.depends and i != pkginfo.name and ((smartprovides.has_key(i) and len([c for c in smartprovides[i] if c in pkgcovered.keys()]) == 0) or not smartprovides.has_key(i))) or not hasattr(pkginfo, 'depends'):
+			all_dependencies = getattr(pkginfo, 'depends', []) + getattr(pkginfo, 'optdepends', [])
+			if (i not in all_dependencies and i != pkginfo.name and ((smartprovides.has_key(i) and len([c for c in smartprovides[i] if c in pkgcovered.keys()]) == 0) or not smartprovides.has_key(i))):
 					if type(dependlist[i]) == dict:
 						ret[0].append('Dependency detected and not included ('+i+') from files '+str([x[len(data)+1:] for x in dependlist[i].keys()]))
 					else:
