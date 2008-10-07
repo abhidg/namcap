@@ -22,7 +22,7 @@ pacmandb = '/var/lib/pacman/local/'
 
 class PacmanPackage(object):
 	strings = ['name', 'version', 'desc', 'url', 'builddate', 'packager', 'install', 'filename', 'csize', 'isize', ]
-	equiv_vars = [('name', 'pkgname'), ('md5sums', 'md5sum'), ('sha1sums', 'sha1sum'), ('depends', 'depend'), ('desc', 'pkgdesc'), ('isize', 'size'), ]
+	equiv_vars = [('name', 'pkgname'), ('md5sums', 'md5sum'), ('sha1sums', 'sha1sum'), ('depends', 'depend'), ('desc', 'pkgdesc'), ('isize', 'size'), ('optdepends', 'optdepend'), ]
 
 	def __init__(self, **data):
 		self.__dict__.update(data)
