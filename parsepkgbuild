@@ -59,6 +59,11 @@ if [ -n "\$makedepends" ]; then
 	for i in \${makedepends[@]}; do echo \$i; done
 	echo ""
 fi
+if [ -n "\$optdepends" ]; then
+	echo "%OPTDEPENDS%"
+	for i in \${optdepends[@]}; do echo \$i; done
+	echo ""
+fi
 if [ -n "\$conflicts" ]; then
 	echo "%CONFLICTS%"
 	for i in \${conflicts[@]}; do echo \$i; done
