@@ -206,9 +206,9 @@ class package:
 				ret[2].append('File '+ str(files) +' link-level dependence on ' + i)
 
 		# Check for packages in testing
-		if os.path.isdir('/var/lib/pacman/testing'):
+		if os.path.isdir('/var/lib/pacman/sync/testing'):
 			for i in dependlist.keys():
-				p = pacman.load(i, '/var/lib/pacman/testing/')
+				p = pacman.load(i, '/var/lib/pacman/sync/testing/')
 				q = load(i)
 				if p != None and q != None and p.version == q.version:
 					ret[1].append('Dependency ' + i + ' on your system is a testing release')
