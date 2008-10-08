@@ -28,8 +28,8 @@ class package:
 		return ""
 	def analyze(self, pkginfo, tar):
 		arrayvars = ['arch', 'license', 'depends', 'makedepends',
-			 'provides', 'conflicts' , 'replaces', 'backup',
-			 'source', 'noextract', 'md5sums']
+			 'optdepends', 'provides', 'conflicts' , 'replaces',
+			 'backup', 'source', 'noextract', 'md5sums']
 		ret = [[],[],[]]
 		for i in pkginfo.pkgbuild:
 			m = re.match('\s*(.*)\s*=\s*(.*)\n', i)
