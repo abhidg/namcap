@@ -1,7 +1,7 @@
-# 
-# namcap rules - __init__
-# Copyright (C) 2003-2007 Jason Chu <jason@archlinux.org>
-# 
+#
+# namcap rules - infodirectory
+# Copyright (C) 2008 Allan McRae <allan@archlinux.org>
+#
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation; either version 2 of the License, or
@@ -15,10 +15,22 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this program; if not, write to the Free Software
 #   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-# 
+#
 
-__tarball__ = ['depends', 'directoryname', 'fileownership', 'gnomemenu', 'perllocal', 'permissions', 'symlink', 'urlpkg', 'capsnamespkg', 'emptydir', 'scrollkeeper', 'libtool', 'gnomemime', 'licensepkg', 'infodirectory']
+import tarfile
 
-__pkgbuild__ = ['md5sums', 'tags', 'url', 'invalidstartdir', 'capsnames', 'carch', 'sfurl', 'badbackups', 'license', 'arrays']
-
-__all__ = __tarball__ + __pkgbuild__
+class package:
+	def short_name(self):
+		return "infodirectory"
+	def long_name(self):
+		return "Checks for info directory file."
+	def prereq(self):
+		return "tar"
+	def analyze(self, pkginfo, tar):
+		ret = [[],[],[]]
+		for i in tar.getnames():
+			if i == "usr/share/info/dir":
+				ret[0].append("Info directory file (" + i + ") needs removed.")
+		return ret
+	def type(self):
+		return "tarball"
