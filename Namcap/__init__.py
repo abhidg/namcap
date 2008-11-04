@@ -17,7 +17,7 @@
 #   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 # 
 
-__tarball__ = ['depends', 'directoryname', 'fileownership', 'gnomemenu', 'perllocal', 'permissions', 'symlink', 'urlpkg', 'capsnamespkg', 'emptydir', 'scrollkeeper', 'libtool', 'gnomemime', 'licensepkg', 'infodirectory']
+__tarball__ = ['depends', 'directoryname', 'fileownership', 'gnomemenu', 'perllocal', 'permissions', 'symlink', 'urlpkg', 'capsnamespkg', 'emptydir', 'scrollkeeper', 'libtool', 'gnomemime', 'licensepkg', 'infodirectory', 'fhsmanpages']
 
 __pkgbuild__ = ['md5sums', 'tags', 'url', 'invalidstartdir', 'capsnames', 'carch', 'sfurl', 'badbackups', 'license', 'arrays']
 
