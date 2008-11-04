@@ -179,3 +179,4 @@ for package in packages:
 			if ret[2] != [] and info_reporting:
 				for j in ret[2]:
 					print string.ljust("PKGBUILD (" + pkginfo.name + ")", 20) + " I: " + j
+# vim: set ts=4 sw=4 noet:

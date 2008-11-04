@@ -54,3 +54,4 @@ class package:
 		return ret
 	def type(self):
 		return "pkgbuild"
+# vim: set ts=4 sw=4 noet:

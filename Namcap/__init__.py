@@ -22,3 +22,5 @@ __tarball__ = ['depends', 'directoryname', 'fileownership', 'gnomemenu', 'perllo
 __pkgbuild__ = ['md5sums', 'tags', 'url', 'invalidstartdir', 'capsnames', 'carch', 'sfurl', 'badbackups', 'license', 'arrays']
 
 __all__ = __tarball__ + __pkgbuild__
+
+# vim: set ts=4 sw=4 noet:

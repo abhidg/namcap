@@ -167,3 +167,4 @@ def getprovides(provides):
 			packagelist.append(pac.name)
 
 	return packagelist
+# vim: set ts=4 sw=4 noet:

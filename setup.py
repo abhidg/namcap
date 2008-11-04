@@ -10,4 +10,4 @@ setup(name="namcap",
 	author_email="jason@archlinux.org",
 	py_modules=["pacman"], packages=["Namcap"], scripts=["namcap.py", 'parsepkgbuild'],data_files =DATAFILES)
 
-
+# vim: set ts=4 sw=4 noet:
