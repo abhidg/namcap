@@ -17,7 +17,7 @@
 #   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 # 
 
-import re, os, os.path, pacman
+import re, os, os.path, pacman, subprocess
 
 pkgcache = {}
 
@@ -64,8 +64,11 @@ def scanlibs(data, dirname, names):
 	sharedlibs, scripts = data
 	for i in names:
 		if os.path.isfile(dirname+'/'+i):
-			var = os.popen3('readelf -d ' + dirname+'/'+i)
-			for j in var[1].readlines():
+			var = subprocess.Popen('readelf -d ' + dirname+'/'+i,
+					shell=True,
+					stdout=subprocess.PIPE,
+					stderr=subprocess.PIPE).communicate()
+			for j in var[0].split('\n'):
 				n = re.search('Shared library: \[(.*)\]', j)
 				# Is this a Shared library: line?
 				if n != None:
@@ -95,9 +98,6 @@ def scanlibs(data, dirname, names):
 					elif re.match('#!.*expect',firstline) != None:
 						scripts.setdefault('expect', {})[dirname+'/'+i] = 1
 					fd.close()
-			var[0].close()
-			var[1].close()
-			var[2].close()
 	return
 			
 def finddepends(liblist):
@@ -150,8 +150,11 @@ def getprovides(depends, provides):
 			provides[i] = pac.provides
 
 def filllibcache():
-	var = os.popen3('ldconfig -p')
-	for j in var[1].readlines():
+	var = subprocess.Popen('ldconfig -p', 
+			shell=True,
+			stdout=subprocess.PIPE,
+			stderr=subprocess.PIPE).communicate()
+	for j in var[0].split('\n'):
 		g = re.match('\s*(.*) \((.*)\) => (.*)',j)
 		if g != None:
 			if g.group(2).startswith('libc6,x86-64'):
