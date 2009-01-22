@@ -35,6 +35,8 @@ class package:
 				ret[1].append("File (" + i.name + ") has the world writable bit set.")
 			if not i.mode & 1 and i.isdir():
 				ret[1].append("Directory (" + i.name + ") does not have the world executable bit set.")
+			if str(i.name).endswith('.a') and i.mode != 0644:
+				ret[1].append("Library (" + i.name + ") does not have permission set to 644.")
 		return ret
 	def type(self):
 		return "tarball"
