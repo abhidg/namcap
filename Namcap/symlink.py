@@ -16,7 +16,7 @@
 #   along with this program; if not, write to the Free Software
 #   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 # 
-import tarfile, re
+import tarfile, re, os
 
 class package:
 	def short_name(self):
@@ -27,11 +27,16 @@ class package:
 		return "tar"
 	def analyze(self, pkginfo, tar):
 		ret = [[],[],[]]
+		filenames = map(lambda s: s.name, tar)
 		for i in tar:
 			if i.issym() or i.islnk():
 				ret[2].append("Symlink (" + i.name + ") found that points to " + i.linkname)
-				if re.search("pkg/", i.linkname):
-					ret[0].append("Symlink (" + i.name + ") points to " + i.linkname)
+				if "/" not in i.linkname:
+					linktarget = os.path.dirname(i.name) + "/" + i.linkname
+				else:
+					linktarget = i.linkname
+				if linktarget not in filenames:
+					ret[0].append("Symlink (" + i.name + ") points to non-existing " + i.linkname)
 		return ret	
 	def type(self):
 		return "tarball"
