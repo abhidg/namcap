@@ -30,10 +30,10 @@ class package:
 		ret = [[],[],[]]
 		if hasattr(pkginfo, 'source'):
 			for source in pkginfo.source:
-				if re.match('(http://|ftp://)\w+.dl.sourceforge.net',source) != None:
-					ret[1].append('Attempting to use specific sf.net mirror, use downloads.sourceforge.net instead')
-				if re.match('(http://|ftp://)dl.sourceforge.net',source) != None:
-					ret[1].append('Attempting to use dl.sourceforge.net, use downloads.sourceforge.net instead')
+				if re.match('(http://|ftp://)\w+.dl.(sourceforge|sf).net',source) != None:
+					ret[1].append('Attempting to use specific sourceforge mirror, use downloads.sourceforge.net instead')
+				if re.match('(http://|ftp://)dl.(sourceforge|sf).net',source) != None:
+					ret[1].append('Attempting to use dl sourceforge domain, use downloads.sourceforge.net instead')
 		return ret
 	def type(self):
 		return "pkgbuild"
