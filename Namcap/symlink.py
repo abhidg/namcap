@@ -29,14 +29,22 @@ class package:
 		ret = [[],[],[]]
 		filenames = map(lambda s: s.name, tar)
 		for i in tar:
-			if i.issym() or i.islnk():
+			if i.issym():
 				ret[2].append("Symlink (" + i.name + ") found that points to " + i.linkname)
-				if "/" not in i.linkname:
-					linktarget = os.path.dirname(i.name) + "/" + i.linkname
-				else:
-					linktarget = i.linkname
-				if linktarget not in filenames:
+				linktarget = i.linkname
+				linklead = os.path.dirname(i.name)
+				while linktarget[:3] == "../":
+					linktarget = linktarget[3:]
+					linklead = linklead.rpartition("/")[0]
+				link = linklead + "/" + linktarget
+				if link[0] == "/": link = link[1:]
+				if i.linkname[0] == "/": link = i.linkname[1:]
+				if link not in filenames:
 					ret[0].append("Symlink (" + i.name + ") points to non-existing " + i.linkname)
+			if i.islnk():
+				ret[2].append("Hard link (" + i.name + ") found that points to " + i.linkname)
+				if i.linkname not in filenames:
+					ret[0].append("Hard link (" + i.name + ") points to non-existing " + i.linkname)
 		return ret	
 	def type(self):
 		return "tarball"
