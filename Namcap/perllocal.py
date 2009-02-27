@@ -31,7 +31,7 @@ class package:
 		j = 'perllocal.pod'
 		for i in tar.getnames():
 			if i[-len(j):] == j:
-				ret[0].append("perllocal.pod found in " + i + ".")
+				ret[0].append(("perllocal-pod-present %s", i))
 		return ret
 	def type(self):
 		return "tarball"

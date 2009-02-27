@@ -56,18 +56,29 @@ def verify_package(filename):
 		return 0
 	return tar
 
+def process_tags(filename="/usr/share/namcap/tags"):
+	tags = {}
+	f = open(filename)
+	for i in f.readlines():
+		if i[0] == "#" or i.strip() == "": continue
+		tagdata = i[:-1].split("::")
+		tags[tagdata[0].strip()] = tagdata[1].strip()
+
+	return tags
+
 # Main
 modules = get_modules()
-
+tags = process_tags()
 info_reporting = 0
 
 # get our options and process them
 try:
-	optlist, args = getopt.getopt(sys.argv[1:], "ihr:", ["rules=","info","help"])
+	optlist, args = getopt.getopt(sys.argv[1:], "ihmr:", ["rules=","info","help","machine-readable"])
 except getopt.GetoptError:
 	usage()
 
 active_modules = []
+m = lambda s: tags[s]
 
 for i, k in optlist:
 	if i in ('-r', '--rules') and active_modules == []:
@@ -86,6 +97,9 @@ for i, k in optlist:
 				usage()
 	if i in ('-i', '--info'):
 		info_reporting = 1
+	if i in ('-m', '--machine-readable'):
+		machine_readable = 1
+		m = lambda s: s
 	if i in ('-h', '--help'):
 		usage()
 
@@ -140,13 +154,14 @@ for package in packages:
 				# Output the three types of messages
 				if ret[0] != []:
 					for j in ret[0]:
-						print string.ljust(pkginfo.name, 10) + " E: " + j
+						print string.ljust(pkginfo.name, 10) + " E: " + m(j[0]) % j[1]
 				if ret[1] != []:
 					for j in ret[1]:
-						print string.ljust(pkginfo.name, 10) + " W: " + j
+						print string.ljust(pkginfo.name, 10) + " W: " +  m(j[0]) % j[1]
 				if ret[2] != [] and info_reporting:
 					for j in ret[2]:
-						print string.ljust(pkginfo.name, 10) + " I: " + j
+						print string.ljust(pkginfo.name, 10) + " I: " +  m(j[0]) % j[1]
+
 
 		# Clean up if we extracted anything
 		if extracted:
@@ -172,11 +187,11 @@ for package in packages:
 			# Output the PKGBUILD messages
 			if ret[0] != []:
 				for j in ret[0]:
-					print string.ljust("PKGBUILD (" + pkginfo.name + ")", 20) + " E: " + j
+					print string.ljust("PKGBUILD (" + pkginfo.name + ")", 20) + " E: " + m(j[0]) % j[1]
 			if ret[1] != []:
 				for j in ret[1]:
-					print string.ljust("PKGBUILD (" + pkginfo.name + ")", 20) + " W: " + j
+					print string.ljust("PKGBUILD (" + pkginfo.name + ")", 20) + " W: " + m(j[0]) % j[1]
 			if ret[2] != [] and info_reporting:
 				for j in ret[2]:
-					print string.ljust("PKGBUILD (" + pkginfo.name + ")", 20) + " I: " + j
+					print string.ljust("PKGBUILD (" + pkginfo.name + ")", 20) + " I: " + m(j[0]) % j[1]
 # vim: set ts=4 sw=4 noet:

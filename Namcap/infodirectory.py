@@ -30,7 +30,7 @@ class package:
 		ret = [[],[],[]]
 		for i in tar.getnames():
 			if i == "usr/share/info/dir":
-				ret[0].append("Info directory file (" + i + ") needs removed.")
+				ret[0].append(("info-dir-file-present %s", i))
 		return ret
 	def type(self):
 		return "tarball"

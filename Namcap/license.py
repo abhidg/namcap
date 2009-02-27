@@ -29,7 +29,7 @@ class package:
 	def analyze(self, pkginfo, tar):
 		ret = [[],[],[]]
 		if not hasattr(pkginfo, 'license') or len(pkginfo.license) == 0:
-			ret[0].append('Missing license')
+			ret[0].append(("missing-license", ()))
 		return ret
 	def type(self):
 		return "pkgbuild"

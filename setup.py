@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 from distutils.core import setup
 
-DATAFILES = [('/usr/share/man/man1', ['namcap.1'])]
+DATAFILES = [('/usr/share/man/man1', ['namcap.1']),
+		('/usr/share/namcap', ['tags'])]
 
 setup(name="namcap",
 	version="2.0",

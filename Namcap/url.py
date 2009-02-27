@@ -29,7 +29,7 @@ class package:
 	def analyze(self, pkginfo, tar):
 		ret = [[],[],[]]
 		if not hasattr(pkginfo, 'url'):
-			ret[0].append('Missing url')
+			ret[0].append(("missing-url", ()))
 		return ret
 	def type(self):
 		return "pkgbuild"

@@ -37,7 +37,7 @@ class package:
 		for i in pkginfo.pkgbuild:
 			if archmatch.match(i):
 				if not archline.match(i) and not archif.match(i):
-					ret[1].append('Reference to one of %s should be changed to $CARCH' % ", ".join(arches))
+					ret[1].append(("specific-host-type-used %s", ",".join(arches)))
 		return ret
 	def type(self):
 		return "pkgbuild"

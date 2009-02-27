@@ -30,16 +30,16 @@ class package:
 		ret = [[],[],[]]
 		if hasattr(pkginfo, 'source'):
 			if not hasattr(pkginfo, 'md5sums'):
-				ret[0].append('Missing md5sums')
+				ret[0].append(("missing-md5sums", ()))
 			else:
 				if len(pkginfo.source) > len(pkginfo.md5sums):
-					ret[0].append('Not enough md5sums: %i needed' % len(pkginfo.source))
+					ret[0].append(("not-enough-md5sums %i needed", len(pkginfo.source)))
 				elif len(pkginfo.source) < len(pkginfo.md5sums):
-					ret[0].append('Too Many md5sums: %i needed' % len(pkginfo.source))
+					ret[0].append(("too-many-md5sums %i needed", len(pkginfo.source)))
 		if hasattr(pkginfo, 'md5sums'):
 			for sum in pkginfo.md5sums:
 				if len(sum) != 32:
-					ret[0].append("Improper md5sum: '%s'" % sum) 
+					ret[0].append(("improper-md5sum %s", sum))
 		return ret
 	def type(self):
 		return "pkgbuild"

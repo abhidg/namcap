@@ -33,12 +33,12 @@ class package:
 		ret = [[],[],[]]
 		for i in tar.getmembers():
 			if i.name.startswith(bad_dir):
-				ret[0].append("Non-FHS man page (" + i.name + ") found. Use /usr/share/man instead")
+				ret[0].append(("non-fhs-man-page %s", i.name))
 			elif not i.name.startswith(gooddir):
 				#Check everything else to see if it has a 'man' path component
 				for part in i.name.split(os.sep):
 					if part == "man":
-						ret[1].append("Potential non-FHS man page (" + i.name + ") found.")
+						ret[1].append(("potential-non-fhs-man-page %s", i.name))
 
 		return ret
 	def type(self):

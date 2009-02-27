@@ -40,17 +40,17 @@ class package:
 				idtag = 1
 
 		if contributortag != 1:
-			ret[1].append('Missing Contributor tag')
+			ret[1].append(("missing-contributor", ()))
 
 		if maintainertag != 1:
-			ret[1].append('Missing Maintainer tag')
+			ret[1].append(("missing-maintainer", ()))
 		else:
-			ret[2].append('Maintainer tags for TUs and devs only')
+			ret[2].append(("maintainer-tags-for-tus-devs", ()))
 
 		if idtag != 1:
-			ret[1].append('Missing CVS Id tag')
+			ret[1].append(("missing-cvs-id", ()))
 		else:
-			ret[2].append('CVS Id tags for TUs and devs only')
+			ret[2].append(("cvs-id-for-tus-devs", ()))
 		return ret
 	def type(self):
 		return "pkgbuild"

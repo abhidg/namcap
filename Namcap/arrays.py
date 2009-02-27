@@ -36,7 +36,7 @@ class package:
 			for j in arrayvars:
 				if m and m.group(1) == j:
 					if not m.group(2).startswith('('):
-						ret[1].append("Variable " + j + " is not an array.")
+						ret[1].append(("variable-not-array %s", j))
 
 		return ret
 	def type(self):

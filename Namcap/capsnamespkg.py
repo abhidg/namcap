@@ -29,7 +29,7 @@ class package:
 	def analyze(self, pkginfo, tar):
 		ret = [[],[],[]]
 		if re.search('[A-Z]', pkginfo.name) != None:
-			ret[0].append('No upper case letters in package names')
+			ret[0].append(("package-name-in-uppercase", ()))
 		return ret
 	def type(self):
 		return "tarball"

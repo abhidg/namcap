@@ -40,7 +40,7 @@ class package:
 					gname = str(i.gid)
 				else:
 					gname = i.gname
-				ret[0].append("File (" + i.name + ") has " + uname + "/" + gname + " permissions.")
+				ret[0].append(("incorrect-permissions %s (%s/%s)", (i.name, uname, gname)))
 		return ret
 	def type(self):
 		return "tarball"

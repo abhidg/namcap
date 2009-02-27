@@ -30,13 +30,13 @@ class package:
 		ret = [[],[],[]]
 		for i in tar.getmembers():
 			if not i.mode & 4 and not (i.issym() or i.islnk()):
-				ret[1].append("File (" + i.name + ") does not have the world readable bit set.")
+				ret[1].append(("file-not-world-readable %s", i.name))
 			if i.mode & 2 and not (i.issym() or i.islnk()):
-				ret[1].append("File (" + i.name + ") has the world writable bit set.")
+				ret[1].append(("file-world-writable %s", i.name))
 			if not i.mode & 1 and i.isdir():
-				ret[1].append("Directory (" + i.name + ") does not have the world executable bit set.")
+				ret[1].append(("directory-not-world-executable %s", i.name))
 			if str(i.name).endswith('.a') and i.mode != 0644:
-				ret[1].append("Library (" + i.name + ") does not have permission set to 644.")
+				ret[1].append(("incorrect-library-permissions %s", i.name))
 		return ret
 	def type(self):
 		return "tarball"

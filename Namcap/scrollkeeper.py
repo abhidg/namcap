@@ -32,6 +32,7 @@ class package:
 		for i in tar.getnames():
 			n = scroll.search(i)
 			if n != None:
+				ret[0].append(("scrollkeeper-dir-exists %s", i))
 				ret[0].append("Scrollkeeper directory exists (" + i + ").  Remember to not run scrollkeeper till post_{install,upgrade,remove}.")
 		return ret
 	def type(self):

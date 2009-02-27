@@ -30,7 +30,7 @@ class package:
 	def analyze(self, pkginfo, tar):
 		ret = [[],[],[]]
 		if not hasattr(pkginfo, 'license') or len(pkginfo.license) == 0:
-			ret[0].append('Missing license')
+			ret[0].append(("missing-license", ()))
 		else:
 			licensepaths = [x for x in tar.getnames() if x.startswith('usr/share/licenses') and not x.endswith('/')]
 			licensedirs = [os.path.split(os.path.split(x)[0])[1] for x in licensepaths]
@@ -40,14 +40,14 @@ class package:
 				lowerlicense = license.lower()
 				if lowerlicense.startswith('custom') or lowerlicense in ("bsd", "mit", "isc", "python", "zlib", "libpng"):
 					if pkginfo.name not in licensedirs:
-						ret[0].append('Missing custom license directory (usr/share/licenses/%s)' % pkginfo.name)
+						ret[0].append(("missing-custom-license-dir usr/share/licenses/%s", pkginfo.name))
 					elif len(licensefiles) == 0:
-						ret[0].append('Missing custom license file in package (usr/share/licenses/%s/*)' % pkginfo.name)
+						ret[0].append(("missing-custom-license-file usr/share/licenses/%s/*", pkginfo.name))
 				# A common license
 				else:
 					commonlicenses = [x.lower() for x in os.listdir('/usr/share/licenses/common')]
 					if lowerlicense not in commonlicenses:
-						ret[0].append("%s is not a common license (/usr/share/licenses/common/%s does not exist)" % (license, license))
+						ret[0].append(("not-a-common-license %s", license))
 		return ret
 	def type(self):
 		return "tarball"

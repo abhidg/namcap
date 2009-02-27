@@ -41,7 +41,7 @@ class package:
 		files = [x for x in tar.getnames() if not x.endswith('/')]
 		for i in dirs:
 			if not inDir(i, files):
-				ret[1].append("Directory (" + i + ") is empty")
+				ret[1].append(("empty-directory %s", i))
 		return ret
 	def type(self):
 		return "tarball"

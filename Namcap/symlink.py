@@ -30,7 +30,7 @@ class package:
 		filenames = map(lambda s: s.name, tar)
 		for i in tar:
 			if i.issym():
-				ret[2].append("Symlink (" + i.name + ") found that points to " + i.linkname)
+				ret[2].append(("symlink-found %s points to %s", (i.name, i.linkname)))
 				linktarget = i.linkname
 				linklead = os.path.dirname(i.name)
 				while linktarget[:3] == "../":
@@ -40,11 +40,11 @@ class package:
 				if link[0] == "/": link = link[1:]
 				if i.linkname[0] == "/": link = i.linkname[1:]
 				if link not in filenames:
-					ret[0].append("Symlink (" + i.name + ") points to non-existing " + i.linkname)
+					ret[0].append(("dangling-symlink %s points to %s", (i.name, i.linkname)))
 			if i.islnk():
-				ret[2].append("Hard link (" + i.name + ") found that points to " + i.linkname)
+				ret[2].append(("hardlink-found %s points to %s",(i.name, i.linkname)))
 				if i.linkname not in filenames:
-					ret[0].append("Hard link (" + i.name + ") points to non-existing " + i.linkname)
+					ret[0].append(("dangling-hardlink %s points to %s", (i.name, i.linkname)))
 		return ret	
 	def type(self):
 		return "tarball"

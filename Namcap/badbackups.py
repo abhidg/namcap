@@ -31,7 +31,7 @@ class package:
 		if hasattr(pkginfo, 'backup'):
 			for item in pkginfo.backup:
 				if re.match('^/',item) != None:
-					ret[0].append("Backup entries should not have preceeding slashes")
+					ret[0].append(("backups-preceding-slashes", ()))
 		return ret
 	def type(self):
 		return "pkgbuild"

@@ -39,7 +39,7 @@ class package:
 				print varname
 				if varname not in stdvars:
 					if not varname.startswith('_'):
-						ret[1].append("Non standard variable '" + varname + "' doesn't start with an underscore")
+						ret[1].append(("extra-var-begins-without-underscore %s", varname))
 		return ret
 	def type(self):
 		return "pkgbuild"

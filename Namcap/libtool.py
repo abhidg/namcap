@@ -30,7 +30,7 @@ class package:
 		ret = [[],[],[]]
 		for i in tar.getnames():
 			if re.search('\.la$',i) != None:
-				ret[1].append("File ("+i+") is a libtool file.")
+				ret[1].append(("libtool-file-present %s", i))
 		return ret
 	def type(self):
 		return "tarball"

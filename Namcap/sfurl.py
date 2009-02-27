@@ -31,9 +31,9 @@ class package:
 		if hasattr(pkginfo, 'source'):
 			for source in pkginfo.source:
 				if re.match('(http://|ftp://)\w+.dl.(sourceforge|sf).net',source) != None:
-					ret[1].append('Attempting to use specific sourceforge mirror, use downloads.sourceforge.net instead')
+					ret[1].append(("specific-sourceforge-mirror", ()))
 				if re.match('(http://|ftp://)dl.(sourceforge|sf).net',source) != None:
-					ret[1].append('Attempting to use dl sourceforge domain, use downloads.sourceforge.net instead')
+					ret[1].append(("using-dl-sourceforge", ()))
 		return ret
 	def type(self):
 		return "pkgbuild"

@@ -27,7 +27,7 @@ class package:
 	def prereq(self):
 		return "tar"
 	def analyze(self, pkginfo, tar):
-		valid_paths = ['etc/', 'usr/bin/', 'usr/sbin/', 'usr/lib', 'usr/include/', 'usr/share/', 'opt/', '.PKGINFO', '.INSTALL', '.FILELIST', '._install', 'lib/', 'sbin/', 'srv/', 'var/lib/', 'var/opt/', 'var/spool/', 'var/lock/', 'var/state/', 'var/run/', 'var/log/', '.CHANGELOG']
+		valid_paths = ['bin/', 'etc/', 'usr/bin/', 'usr/sbin/', 'usr/lib', 'usr/include/', 'usr/share/', 'opt/', '.PKGINFO', '.INSTALL', '.FILELIST', '._install', 'lib/', 'sbin/', 'srv/', 'var/lib/', 'var/opt/', 'var/spool/', 'var/lock/', 'var/state/', 'var/run/', 'var/log/', '.CHANGELOG']
 		ret = [[],[],[]]
 		for i in tar.getnames():
 			# Replace multiple /'s at the end of a string with a single /
@@ -40,7 +40,7 @@ class package:
 				if i[0:len(j)] == j or j[0:len(i)] == i:
 					fileok = 1
 			if not fileok:
-				ret[1].append("File (" + i + ") exists in a non-standard directory.")
+				ret[1].append(("file-in-non-standard-dir %s", i))
 		return ret
 	def type(self):
 		return "tarball"
