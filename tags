@@ -52,3 +52,4 @@ maintainer-tags-for-tus-devs :: 'Maintainer tags for TUs and devs only
 cvs-id-for-tus-devs :: CVS Id tags for TUs and devs only
 missing-url :: Missing url
 hicolor-icon-cache-not-updated :: Package installs files to /usr/share/icons/hicolor, but no gtk-update-icon-cache call.
+insecure-rpath :: Insecure RPATH (%s)
